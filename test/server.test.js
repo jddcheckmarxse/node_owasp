@@ -18,10 +18,17 @@ function request(port, path) {
           data += chunk;
         });
         res.on("end", () => {
+          let parsedBody;
+          try {
+            parsedBody = JSON.parse(data);
+          } catch (error) {
+            reject(new Error(`Failed to parse JSON response: ${error.message}`));
+            return;
+          }
           resolve({
             statusCode: res.statusCode,
             headers: res.headers,
-            body: JSON.parse(data),
+            body: parsedBody,
           });
         });
       },
@@ -58,6 +65,22 @@ test("hello endpoint rejects unsafe input", async () => {
     const response = await request(port, "/hello?name=<script>alert(1)</script>");
     assert.equal(response.statusCode, 400);
     assert.deepEqual(response.body, { error: "Invalid input." });
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((err) => (err ? reject(err) : resolve()));
+    });
+  }
+});
+
+test("hello endpoint accepts valid input", async () => {
+  const server = createServer();
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const { port } = server.address();
+
+  try {
+    const response = await request(port, "/hello?name=Alice");
+    assert.equal(response.statusCode, 200);
+    assert.deepEqual(response.body, { message: "Hello, Alice!" });
   } finally {
     await new Promise((resolve, reject) => {
       server.close((err) => (err ? reject(err) : resolve()));
