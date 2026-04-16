@@ -1,0 +1,22 @@
+{
+  "name": "node_owasp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jddcheckmarxse/node_owasp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jddcheckmarxse/node_owasp/issues"
+  },
+  "homepage": "https://github.com/jddcheckmarxse/node_owasp#readme"
+}
