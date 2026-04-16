@@ -47,8 +47,8 @@ function requestHandler(req, res) {
     }
 
     sendJson(res, 404, { error: "Not found." });
-  } catch (error) {
-    console.error("Unhandled request error", error);
+  } catch (_error) {
+    console.error("Unhandled request error");
     sendJson(res, 500, { error: "Unexpected error." });
   }
 }
